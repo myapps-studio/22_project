@@ -8,20 +8,37 @@ App = React.createClass({
         };
     },
 
+    // promises
+
     handleSearch: function(searchingText) {  // 1.
-        this.setState({
-          loading: true  // 2.
-        });
-        this.getGif(searchingText, function(gif) {  // 3.
-          this.setState({  // 4
-            loading: false,  // a
-            gif: gif,  // b
-            searchingText: searchingText  // c
-          });
-        }.bind(this));
+      return new Promise( // start
+        function (resolve, reject) {
+
+            this.setState({
+              loading: true  // 2.
+            });
+            this.getGif(searchingText, function(gif) {  // 3.
+              this.setState({  // 4
+                loading: false,  // a
+                gif: gif,  // b
+                searchingText: searchingText  // c
+              });
+            }.bind(this));
+
+            (error, data) => {
+              if (error) {
+                  reject(error);
+              } else {
+                  resolve(data);
+              }
+          }
+        }); // koniec promisa
       },
 
       getGif: function(searchingText, callback) {  // 1.
+        return new Promise( // start
+          function (resolve, reject) {        
+        
         var url = 'https://api.giphy.com' + '/v1/gifs/random?api_key=' + 'zjkEQrqw4Nd5MZUAQzkuVPrMdGReDgqm' + '&tag=' + searchingText;  // 2.
         var xhr = new XMLHttpRequest();  // 3.
         xhr.open('GET', url);
@@ -36,7 +53,21 @@ App = React.createClass({
             }
         };
         xhr.send();
+
+          (error, data) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(data);
+            }
+        }
+      }); // koniec promisa
     },
+
+    Promise.all(handleSearch(searchingText))
+    .then(() => {
+        getGif(searchingText, callback);
+    });
 
     render: function() {
 
