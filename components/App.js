@@ -11,28 +11,21 @@ App = React.createClass({
     // promises
 
     handleSearch: function(searchingText) {  // 1.
-      return new Promise( // start
-        function (resolve, reject) {
-
             this.setState({
               loading: true  // 2.
             });
-            this.getGif(searchingText, function(gif) {  // 3.
-              this.setState({  // 4
-                loading: false,  // a
-                gif: gif,  // b
-                searchingText: searchingText  // c
-              });
-            }.bind(this));
 
-            (error, data) => {
-              if (error) {
-                  reject(error);
-              } else {
-                  resolve(data);
-              }
-          }
-        }); // koniec promisa
+// tutaj <<then??>> 
+
+            this.getGif(searchingText, function(gif))
+            .then(resolve => 
+              {  // 3.
+                this.setState({  // 4
+                  loading: false,  // a
+                  gif: gif,  // b
+                  searchingText: searchingText  // c
+                });
+              }.bind(this));
       },
 
       getGif: function(searchingText, callback) {  // 1.
@@ -63,11 +56,6 @@ App = React.createClass({
         }
       }); // koniec promisa
     },
-
-    Promise.all(handleSearch(searchingText))
-    .then(() => {
-        getGif(searchingText, callback);
-    });
 
     render: function() {
 
