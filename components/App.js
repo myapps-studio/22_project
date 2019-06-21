@@ -11,22 +11,32 @@ App = React.createClass({
     // promises
 
     handleSearch: function(searchingText) {  // 1.
-            this.setState({
-              loading: true  // 2.
-            });
+      this.setState({
+        loading: true  // 2.
+      });
 
-// tutaj <<then??>> 
-
-            this.getGif(searchingText, function(gif))
-            .then(resolve => 
-              {  // 3.
-                this.setState({  // 4
+// moja propozycja
+/*
+      this.getGif(searchingText, function(gif))
+        .then (result => 
+              this.setState({  // 4
                   loading: false,  // a
                   gif: gif,  // b
                   searchingText: searchingText  // c
                 });
-              }.bind(this));
-      },
+              );
+*/
+// ~~~~~~~~~~~~~~^
+/*
+      this.getGif(searchingText, function(gif) {  // 3.
+        this.setState({  // 4
+          loading: false,  // a
+          gif: gif,  // b
+          searchingText: searchingText  // c
+        });
+      }.bind(this));
+*/
+    },
 
       getGif: function(searchingText, callback) {  // 1.
         return new Promise( // start
@@ -47,13 +57,8 @@ App = React.createClass({
         };
         xhr.send();
 
-          (error, data) => {
-            if (error) {
-                reject(error);
-            } else {
-                resolve(data);
-            }
-        }
+        resolve(result); //spełnienie obietnicy
+        reject(error); //niespełnienie obietnicy
       }); // koniec promisa
     },
 
