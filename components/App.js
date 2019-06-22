@@ -16,16 +16,18 @@ App = React.createClass({
       });
 
 // moja propozycja
-/*
-      this.getGif(searchingText, function(gif))
+
+      this.getGif(searchingText)
         .then (result => 
+            {
               this.setState({  // 4
-                  loading: false,  // a
-                  gif: gif,  // b
-                  searchingText: searchingText  // c
-                });
-              );
-*/
+                loading: false,  // a
+                gif: gif,  // b
+                searchingText: searchingText  // c
+                }).bind(this);
+            }
+        );
+
 // ~~~~~~~~~~~~~~^
 /*
       this.getGif(searchingText, function(gif) {  // 3.
