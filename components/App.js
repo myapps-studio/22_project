@@ -18,7 +18,7 @@ App = React.createClass({
 // moja propozycja
 
       this.getGif(searchingText)
-        .then (result => 
+        .then ( gif => 
             {
               this.setState({  // 4
                 loading: false,  // a
@@ -26,7 +26,8 @@ App = React.createClass({
                 searchingText: searchingText  // c
                 }).bind(this);
             }
-        );
+        )
+        .catch(Txt => console.log(Txt));
 
 // ~~~~~~~~~~~~~~^
 /*
@@ -48,19 +49,26 @@ App = React.createClass({
         var xhr = new XMLHttpRequest();  // 3.
         xhr.open('GET', url);
         xhr.onload = function() {
+          // musimy je umieścić wewnątrz obsługi naszego zapytania AJAX
+          // Resolve zamiast callback'a... a reject, jeżeli status będzie inny niż 200
+
             if (xhr.status === 200) {
                var data = JSON.parse(xhr.responseText).data; // 4.
                 var gif = {  // 5.
                     url: data.fixed_width_downsampled_url,
                     sourceUrl: data.url
                 };
-                callback(gif);  // 6.
+                //callback(gif);  // 6.
+                resolve(gif);
+            } else {
+              var Txt = "błędy"
+                reject(Txt);
             }
         };
         xhr.send();
 
-        resolve(result); //spełnienie obietnicy
-        reject(error); //niespełnienie obietnicy
+        // resolve(result); //spełnienie obietnicy
+        // reject(error); //niespełnienie obietnicy
       }); // koniec promisa
     },
 
